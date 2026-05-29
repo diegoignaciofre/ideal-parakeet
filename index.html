@@ -1,1 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calor Hogar — Leña & Pellets Temuco</title>
+  <meta name="description" content="Venta de leña, pellet, carbón y accesorios de calefacción en Temuco. Despacho a domicilio." />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a18; }
 
+    /* HEADER */
+    .header {
+      background: #2C2C2A; color: white;
+      padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .logo-top { font-size: 20px; font-weight: 700; color: #EF9F27; letter-spacing: 1px; }
+    .logo-sub { font-size: 10px; color: #aaa; letter-spacing: 2px; text-transform: uppercase; }
+    .cart-btn {
+      background: #D85A30; border: none; border-radius: 10px;
+      padding: 9px 16px; color: white; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500;
+    }
+    .cart-badge {
+      background: #EF9F27; color: #2C2C2A; border-radius: 50%;
+      width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+
+    /* NAV */
+    .nav { background: #D85A30; padding: 0 16px; display: flex; gap: 2px; overflow-x: auto; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      background: none; border: none; color: rgba(255,255,255,0.75);
+      padding: 11px 14px; cursor: pointer; font-size: 13px; white-space: nowrap;
+      border-bottom: 3px solid transparent; transition: all 0.15s;
+    }
+    .nav-btn.active { color: white; border-bottom-color: #EF9F27; font-weight: 500; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a1a18 0%, #3a2a1a 100%);
+      padding: 32px 20px; text-align: center; color: white;
+    }
+    .hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .hero p { font-size: 14px; color: #bbb; margin-bottom: 16px; }
+    .hero-badge {
+      display: inline-block; background: #EF9F27; color: #2C2C2A;
+      padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 600;
+    }
+
+    /* BANNER */
+    .banner {
+      background: #E1F5EE; color: #0F6E56;
+      padding: 10px 20px; font-size: 13px; text-align: center;
+    }
+
+    /* PRODUCTS */
+    .products { padding: 20px 16px; max-width: 960px; margin: 0 auto; }
+    .section-title {
+      font-size: 12px; font-weight: 600; color: #888;
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+
+    /* CARD */
+    .card {
+      background: white; border: 1px solid #e8e6e0;
+      border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .card-img-wrap {
+      width: 100%; height: 170px; overflow: hidden; background: #f0ede8; position: relative;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .card:hover .card-img-wrap img { transform: scale(1.04); }
+    .card-img-icon {
+      width: 100%; height: 100%; display: flex; align-items: center;
+      justify-content: center; font-size: 52px;
+    }
+    .card-body { padding: 14px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+    .card-name { font-size: 14px; font-weight: 600; color: #1a1a18; line-height: 1.3; }
+    .card-desc { font-size: 12px; color: #777; line-height: 1.5; flex: 1; }
+    .card-price { font-size: 20px; font-weight: 700; color: #D85A30; }
+    .card-price span { font-size: 11px; color: #999; font-weight: 400; }
+
+    /* STOCK */
+    .stock-row { display: flex; align-items: center; gap: 5px; }
+    .stock-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .stock-dot.green { background: #25C566; }
+    .stock-dot.yellow { background: #EF9F27; }
+    .stock-dot.red { background: #D85A30; }
+    .stock-label { font-size: 11px; font-weight: 500; }
+    .stock-label.green { color: #0F6E56; }
+    .stock-label.yellow { color: #9a5e00; }
+    .stock-label.red { color: #993C1D; }
+
+    .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-bottom: 2px; }
+    .tag-hot { background: #FAECE7; color: #993C1D; }
+    .tag-new { background: #EAF3DE; color: #3B6D11; }
+
+    /* QTY */
+    .qty-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+    .qty-btn {
+      background: #f0ede8; border: none; border-radius: 7px;
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px; color: #333; font-weight: 500;
+    }
+    .qty-btn:hover { background: #e0ddd8; }
+    .qty-num { font-size: 15px; font-weight: 600; min-width: 22px; text-align: center; }
+    .add-btn {
+      background: #D85A30; color: white; border: none;
+      border-radius: 8px; padding: 8px 6px; cursor: pointer; font-size: 12px; font-weight: 500; flex: 1;
+      transition: background 0.15s;
+    }
+    .add-btn:hover { background: #bf4e28; }
+    .add-btn.added { background: #4e8c20; }
+    .add-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* CART PANEL */
+    .cart-panel {
+      background: white; border-top: 2px solid #e8e6e0;
+      padding: 20px 16px; max-width: 960px; margin: 8px auto 0;
+      border-radius: 14px 14px 0 0;
+    }
+    .cart-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid #f0ede8; font-size: 14px;
+    }
+    .cart-item-name { font-weight: 600; color: #1a1a18; }
+    .cart-item-sub { color: #999; font-size: 12px; margin-top: 2px; }
+    .cart-item-price { color: #D85A30; font-weight: 700; }
+    .remove-btn {
+      background: none; border: none; cursor: pointer; color: #ccc;
+      padding: 4px 8px; font-size: 18px; line-height: 1;
+    }
+    .remove-btn:hover { color: #D85A30; }
+    .total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 0 10px; font-weight: 700; font-size: 18px;
+    }
+    .checkout-btn {
+      width: 100%; padding: 14px; background: #D85A30; color: white; border: none;
+      border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;
+      margin-bottom: 10px; transition: background 0.15s;
+    }
+    .checkout-btn:hover { background: #bf4e28; }
+    .wsp-btn {
+      width: 100%; padding: 14px; background: #25D366; color: white; border: none;
+      border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.15s;
+    }
+    .wsp-btn:hover { background: #1eb855; }
+
+    /* FOOTER */
+    footer {
+      background: #2C2C2A; color: #aaa; text-align: center;
+      padding: 24px 20px; font-size: 13px; margin-top: 20px;
+    }
+    footer a { color: #EF9F27; text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 20px; }
+      .card-img-wrap { height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <div class="logo-top">CALOR HOGAR</div>
+    <div class="logo-sub">Leña &amp; Pellets · Temuco</div>
+  </div>
+  <button class="cart-btn" onclick="toggleCart()">
+    🛒 Carrito
+    <span class="cart-badge" id="cart-count">0</span>
+  </button>
+</header>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="filterCat('todos',this)">Todos</button>
+  <button class="nav-btn" onclick="filterCat('lena',this)">Leña</button>
+  <button class="nav-btn" onclick="filterCat('astillas',this)">Astillas</button>
+  <button class="nav-btn" onclick="filterCat('pellet',this)">Pellet</button>
+  <button class="nav-btn" onclick="filterCat('carbon',this)">Carbón</button>
+  <button class="nav-btn" onclick="filterCat('accesorios',this)">Accesorios</button>
+</nav>
+
+<section class="hero">
+  <h1>🔥 Calefacción para tu hogar</h1>
+  <p>Despacho a domicilio · Temuco y alrededores</p>
+  <span class="hero-badge">🚚 Despacho gratis disponible</span>
+</section>
+
+<div class="banner">
+  📞 Pedidos también por WhatsApp: <strong>+56 9 5374 3962</strong> · Inés de Suárez 1053, Temuco
+</div>
+
+<main class="products">
+  <p class="section-title">Catálogo de productos</p>
+  <div class="grid" id="product-grid"></div>
+</main>
+
+<div class="cart-panel" id="cart-panel" style="display:none">
+  <p class="section-title">Tu carrito</p>
+  <div id="cart-items"></div>
+  <div class="total-row">
+    <span>Total</span>
+    <span id="cart-total" style="color:#D85A30;">$0</span>
+  </div>
+  <button class="checkout-btn" onclick="alert('Próximamente: pago online con Khipu / Flow. Por ahora usa WhatsApp.')">
+    💳 Pagar online (Khipu / Flow)
+  </button>
+  <button class="wsp-btn" onclick="pedirWhatsapp()">
+    📱 Pedir por WhatsApp
+  </button>
+</div>
+
+<footer>
+  <p>📍 Inés de Suárez 1053, Temuco · 📞 2541756 · 📱 +56 9 5374 3962</p>
+  <p style="margin-top:8px">
+    <a href="https://www.instagram.com/calorhogarstore/" target="_blank">Instagram</a> ·
+    <a href="https://www.facebook.com/calorhogarstore/" target="_blank">Facebook</a>
+  </p>
+  <p style="margin-top:10px; font-size:11px;">© 2025 Calor Hogar · Temuco, Chile</p>
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  //  PRODUCTOS — edita nombre, precio, stock e img cuando quieras
+  //  img: ruta relativa a la carpeta img/ del repo
+  //  stock: número de unidades disponibles (pon 0 para "Sin stock")
+  // ─────────────────────────────────────────────────────────────
+  const products = [
+    {
+      id:1, cat:'lena',
+      name:'Leña nativa',
+      desc:'Roble u otras especies nativas, alta combustión y larga duración',
+      price:4000, unit:'por unidad',
+      stock: 80,
+      img:'img/lena-nativa-eucalipto.png',
+      tag:'hot'
+    },
+    {
+      id:2, cat:'lena',
+      name:'Leña eucalipto',
+      desc:'Buena llama, ideal para encender rápido',
+      price:3500, unit:'por unidad',
+      stock: 60,
+      img:'img/lena-nativa-eucalipto.png',
+      tag:''
+    },
+    {
+      id:3, cat:'astillas',
+      name:'Malla de astillas',
+      desc:'Ideal para encendido fácil y rápido',
+      price:2000, unit:'por malla',
+      stock: 50,
+      img:'img/malla-astillas.png',
+      tag:''
+    },
+    {
+      id:4, cat:'astillas',
+      name:'Saco de astillas',
+      desc:'Mayor cantidad, excelente para encender',
+      price:10000, unit:'por saco',
+      stock: 20,
+      img:'img/saco-astillas.jpg',
+      tag:'new'
+    },
+    {
+      id:5, cat:'pellet',
+      name:'Pellet Enesa 15 kg',
+      desc:'Pellet premium certificado, baja ceniza, ENplus A1',
+      price:4290, unit:'por saco',
+      stock: 45,
+      img:'img/pellet-enesa.png',
+      tag:'hot'
+    },
+    {
+      id:6, cat:'pellet',
+      name:'Pellet Climandef 15 kg',
+      desc:'A1+, alto poder calorífico, poco residuo',
+      price:4290, unit:'por saco',
+      stock: 30,
+      img:'img/pellet-climandef.png',
+      tag:'hot'
+    },
+    {
+      id:7, cat:'carbon',
+      name:'Carbón El Acampao',
+      desc:'Carbón vegetal premium 2,5 kg, buena duración y brasa pareja',
+      price:3000, unit:'por unidad',
+      stock: 35,
+      img:'img/carbon-acampao.png',
+      tag:''
+    },
+    {
+      id:8, cat:'accesorios',
+      name:'Aspiradora Ribimex cenizas',
+      desc:'Aspiradora especial MiniCen para cenizas de estufas y chimeneas',
+      price:50000, unit:'por unidad',
+      stock: 5,
+      img:'img/aspiradora-ribimex.png',
+      tag:'new'
+    },
+  ];
+
+  // ──────────────────────────────────────────
+  //  Función para mostrar estado del stock
+  // ──────────────────────────────────────────
+  function stockInfo(stock) {
+    if (stock === 0)  return { cls:'red',    label:'Sin stock' };
+    if (stock <= 5)   return { cls:'yellow', label:`Últimas ${stock} unidades` };
+    if (stock <= 15)  return { cls:'yellow', label:`Stock bajo (${stock})` };
+    return              { cls:'green',  label:`Disponible (${stock})` };
+  }
+
+  let cart = {};
+  let currentCat = 'todos';
+
+  function fmt(n){ return '$' + n.toLocaleString('es-CL'); }
+
+  function renderProducts(cat){
+    const grid = document.getElementById('product-grid');
+    const list = cat === 'todos' ? products : products.filter(p => p.cat === cat);
+    grid.innerHTML = list.map(p => {
+      const qty = cart[p.id] ? cart[p.id].qty : 0;
+      const tag = p.tag === 'hot' ? '<span class="tag tag-hot">⭐ Más vendido</span>' :
+                  p.tag === 'new' ? '<span class="tag tag-new">✨ Nuevo</span>' : '';
+      const si = stockInfo(p.stock);
+      const sinStock = p.stock === 0;
+
+      const imgHtml = p.img
+        ? `<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-img-icon\\'>${p.icon||'🪵'}</div>'">`
+        : `<div class="card-img-icon">${p.icon||'🪵'}</div>`;
+
+      return `<div class="card">
+        <div class="card-img-wrap">${imgHtml}</div>
+        <div class="card-body">
+          ${tag}
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.desc}</div>
+          <div class="stock-row">
+            <div class="stock-dot ${si.cls}"></div>
+            <span class="stock-label ${si.cls}">${si.label}</span>
+          </div>
+          <div class="card-price">${fmt(p.price)} <span>${p.unit}</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty(${p.id},-1)" ${sinStock?'disabled':''}>−</button>
+            <span class="qty-num" id="qty-${p.id}">${qty}</span>
+            <button class="qty-btn" onclick="changeQty(${p.id},1)" ${sinStock?'disabled':''}>+</button>
+            <button class="add-btn ${qty>0?'added':''}" id="btn-${p.id}"
+              onclick="addToCart(${p.id})" ${sinStock?'disabled':''}>
+              ${sinStock ? 'Sin stock' : qty>0 ? '✓ En carrito' : 'Agregar'}
+            </button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function changeQty(id, delta){
+    const p = products.find(x => x.id === id);
+    if(p.stock === 0) return;
+    if(!cart[id]) cart[id] = {qty:0, ...p};
+    cart[id].qty = Math.max(0, Math.min(p.stock, cart[id].qty + delta));
+    if(cart[id].qty === 0) delete cart[id];
+    updateUI();
+  }
+
+  function addToCart(id){
+    const p = products.find(x => x.id === id);
+    if(p.stock === 0) return;
+    if(!cart[id]) cart[id] = {qty:0, ...p};
+    if(cart[id].qty < p.stock) cart[id].qty++;
+    updateUI();
+  }
+
+  function removeItem(id){
+    delete cart[id];
+    updateUI();
+    renderProducts(currentCat);
+  }
+
+  function updateUI(){
+    const total = Object.values(cart).reduce((s,i) => s + i.price * i.qty, 0);
+    const count = Object.values(cart).reduce((s,i) => s + i.qty, 0);
+    document.getElementById('cart-count').textContent = count;
+    products.forEach(p => {
+      const q = cart[p.id] ? cart[p.id].qty : 0;
+      const qEl = document.getElementById('qty-'+p.id);
+      const bEl = document.getElementById('btn-'+p.id);
+      if(qEl) qEl.textContent = q;
+      if(bEl && p.stock > 0){
+        bEl.textContent = q > 0 ? '✓ En carrito' : 'Agregar';
+        bEl.className = 'add-btn' + (q > 0 ? ' added' : '');
+      }
+    });
+    const panel = document.getElementById('cart-panel');
+    if(count > 0){
+      panel.style.display = 'block';
+      document.getElementById('cart-items').innerHTML = Object.values(cart).map(i => `
+        <div class="cart-item">
+          <div>
+            <div class="cart-item-name">${i.name}</div>
+            <div class="cart-item-sub">x${i.qty} × ${fmt(i.price)}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="cart-item-price">${fmt(i.price * i.qty)}</span>
+            <button class="remove-btn" onclick="removeItem(${i.id})">×</button>
+          </div>
+        </div>`).join('');
+      document.getElementById('cart-total').textContent = fmt(total);
+    } else {
+      panel.style.display = 'none';
+    }
+  }
+
+  function toggleCart(){
+    const panel = document.getElementById('cart-panel');
+    if(panel.style.display !== 'none'){
+      panel.scrollIntoView({behavior:'smooth'});
+    }
+  }
+
+  function filterCat(cat, btn){
+    currentCat = cat;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts(cat);
+  }
+
+  function pedirWhatsapp(){
+    const items = Object.values(cart).map(i => `• ${i.name} x${i.qty} = ${fmt(i.price*i.qty)}`).join('%0A');
+    const total = Object.values(cart).reduce((s,i) => s + i.price * i.qty, 0);
+    const msg = `Hola Calor Hogar! Quiero hacer un pedido:%0A%0A${items}%0A%0ATotal: ${fmt(total)}%0A%0A¿Pueden confirmar disponibilidad y despacho?`;
+    window.open('https://wa.me/56953743962?text=' + msg, '_blank');
+  }
+
+  renderProducts('todos');
+</script>
+</body>
+</html>
