@@ -71,10 +71,13 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     }
     .card-img-wrap {
-      width: 100%; height: 170px; overflow: hidden; background: #f0ede8; position: relative;
+      width: 100%; height: 150px; overflow: hidden; background: #f0ede8; position: relative;
+      border-radius: 0;
     }
     .card-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%; height: 100%; object-fit: contain;
+      padding: 8px;
+      background: #faf8f4;
       transition: transform 0.3s ease;
     }
     .card:hover .card-img-wrap img { transform: scale(1.04); }
@@ -167,16 +170,21 @@
     @media (max-width: 480px) {
       .grid { grid-template-columns: repeat(2, 1fr); }
       .hero h1 { font-size: 20px; }
-      .card-img-wrap { height: 140px; }
+      .card-img-wrap { height: 130px; }
     }
   </style>
 </head>
 <body>
 
 <header class="header">
-  <div>
-    <div class="logo-top">CALOR HOGAR</div>
-    <div class="logo-sub">Leña &amp; Pellets · Temuco</div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <img src="logo.png" alt="Calor Hogar"
+         style="height:42px; width:auto; object-fit:contain;"
+         onerror="this.style.display='none'">
+    <div>
+      <div class="logo-top">CALOR HOGAR</div>
+      <div class="logo-sub">Leña &amp; Pellets · Temuco</div>
+    </div>
   </div>
   <button class="cart-btn" onclick="toggleCart()">
     🛒 Carrito
@@ -308,7 +316,7 @@
       desc:'Aspiradora especial MiniCen para cenizas de estufas y chimeneas',
       price:50000, unit:'por unidad',
       stock: 5,
-      img:'4 - copia.png',
+      img:'4.png', imgFallback:'4 - copia.png',
       tag:'new'
     },
   ];
@@ -338,8 +346,9 @@
       const si = stockInfo(p.stock);
       const sinStock = p.stock === 0;
 
+      const fb = p.imgFallback ? p.imgFallback.replace(/'/g, "\'") : '';
       const imgHtml = p.img
-        ? `<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-img-icon\\'>${p.icon||'🪵'}</div>'">`
+        ? `<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="if(this.dataset.tried){this.parentElement.innerHTML='<div class=\'card-img-icon\'>${p.icon||'🪵'}</div>';}else{this.dataset.tried=1;this.src='${fb||''}'}">`
         : `<div class="card-img-icon">${p.icon||'🪵'}</div>`;
 
       return `<div class="card">
